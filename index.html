@@ -633,9 +633,162 @@
       font-size: 0.78rem;
       color: #64748b;
     }
+
+    /* Controle discreto de som na segunda tela */
+    .audio-toggle-btn {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 120;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #f8fafc;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .audio-toggle-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--torajo-green);
+      background: rgba(30, 41, 59, 0.92);
+    }
+
+    .audio-toggle-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Personagens decorativos fixos/flutuantes nas extremidades inferiores da 2ª tela */
+    .corner-characters {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 25;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.7s ease 0.35s;
+    }
+
+    .corner-characters.visible {
+      opacity: 1;
+    }
+
+    .corner-char {
+      position: fixed;
+      bottom: 8px;
+      width: 84px;
+      height: auto;
+      max-height: 124px;
+      pointer-events: auto;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55));
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .corner-char:hover {
+      filter: drop-shadow(0 12px 22px rgba(250, 204, 21, 0.35));
+    }
+
+    .corner-char img {
+      width: 100%;
+      height: 100%;
+      max-height: 124px;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Canto inferior esquerdo: Azedo pulando */
+    .corner-azedo {
+      left: 6px;
+      transform-origin: bottom center;
+      animation: azedoJump 1.35s ease-in-out infinite;
+    }
+
+    @keyframes azedoJump {
+      0%, 100% {
+        transform: translateY(0) scaleX(1.04) scaleY(0.95);
+      }
+      45% {
+        transform: translateY(-22px) scaleX(0.96) scaleY(1.05);
+      }
+      75% {
+        transform: translateY(-4px) scaleX(1.02) scaleY(0.98);
+      }
+    }
+
+    /* Canto inferior direito: Linn acenando */
+    .corner-linn {
+      right: 6px;
+      transform-origin: bottom center;
+      animation: linnWave 2.1s ease-in-out infinite;
+    }
+
+    @keyframes linnWave {
+      0%, 100% {
+        transform: rotate(0deg) translateY(0);
+      }
+      25% {
+        transform: rotate(-8deg) translateY(-4px);
+      }
+      50% {
+        transform: rotate(7deg) translateY(-2px);
+      }
+      75% {
+        transform: rotate(-5deg) translateY(-3px);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .corner-char {
+        width: 68px;
+        max-height: 102px;
+        bottom: 6px;
+      }
+      .corner-char img {
+        max-height: 102px;
+      }
+    }
+
+    @media (min-width: 640px) {
+      .corner-char {
+        width: 98px;
+        max-height: 142px;
+        bottom: 14px;
+      }
+      .corner-char img {
+        max-height: 142px;
+      }
+      .corner-azedo {
+        left: 20px;
+      }
+      .corner-linn {
+        right: 20px;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Áudio de fundo a partir de 1m02s (62s) até o final -->
+  <audio id="bg-music" src="torajo.m4a" preload="auto"></audio>
+
+  <!-- Botão discreto de controle de som -->
+  <button id="audio-toggle-btn" class="audio-toggle-btn" type="button" aria-label="Alternar som da música" style="display: none;">
+    <span id="audio-icon">🔊</span>
+    <span id="audio-label">Som Ligado</span>
+  </button>
 
   <!-- Canvas de Confetes -->
   <canvas id="confetti-canvas"></canvas>
@@ -741,9 +894,9 @@
         <div class="char-badge" onclick="burstMiniConfetti()">
           <div class="char-avatar" style="background: #fef9c3; border-color: #facc15;">
             <img
-              src="Linn.jpg"
+              src="Linn.webp"
               alt="Linn"
-              data-fallbacks="linn.jpg,Linn.jpeg,linn.jpeg,Linn.webp,linn.webp,Linn.png,linn.png"
+              data-fallbacks="linn.webp,Linn.jpg,linn.jpg,Linn.jpeg,linn.jpeg,Linn.png,linn.png"
               data-char="linn"
               onerror="handleCharacterImageError(this)"
             >
@@ -841,175 +994,146 @@
     </div>
   </main>
 
+  <!-- Personagens fixos nas extremidades inferiores da segunda tela -->
+  <div id="corner-characters" class="corner-characters" aria-hidden="false">
+    <div
+      class="corner-char corner-azedo"
+      title="Azedo pulando! Toque para soltar confetes"
+      onclick="burstMiniConfetti()"
+    >
+      <img
+        src="Azedo.png"
+        alt="Azedo pulando"
+        data-fallbacks="azedo.png,Azedo.jpg,azedo.jpg,Azedo.jpeg,azedo.jpeg,Azedo.webp,azedo.webp"
+        data-char="azedo"
+        onerror="handleCharacterImageError(this)"
+      >
+    </div>
+
+    <div
+      class="corner-char corner-linn"
+      title="Linn acenando! Toque para soltar confetes"
+      onclick="burstMiniConfetti()"
+    >
+      <img
+        src="Linn.webp"
+        alt="Linn acenando"
+        data-fallbacks="linn.webp,Linn.jpg,linn.jpg,Linn.jpeg,linn.jpeg,Linn.png,linn.png"
+        data-char="linn"
+        onerror="handleCharacterImageError(this)"
+      >
+    </div>
+  </div>
+
   <script>
     // ==========================================
-    // 0. FALLBACK AUTOMÁTICO DE IMAGENS DOS PERSONAGENS
-    // ==========================================
-    const characterSvgFallbacks = {
-      torajo: `<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true">
-        <circle cx="32" cy="35" r="20" fill="#4ade80"/>
-        <path d="M32 15c2-6 8-10 13-8-2 6-7 9-13 8z" fill="#bef264"/>
-        <circle cx="25" cy="33" r="3.5" fill="#0f172a"/>
-        <circle cx="39" cy="33" r="3.5" fill="#0f172a"/>
-        <path d="M25 43 Q32 49 39 43" stroke="#0f172a" stroke-width="3" stroke-linecap="round" fill="none"/>
-      </svg>`,
-      morajo: `<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true">
-        <circle cx="32" cy="35" r="20" fill="#f87171"/>
-        <path d="M20 27 L29 31 M44 27 L35 31" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="25" cy="34" r="3.2" fill="#0f172a"/>
-        <circle cx="39" cy="34" r="3.2" fill="#0f172a"/>
-        <path d="M26 45 Q32 41 38 45" stroke="#0f172a" stroke-width="3" stroke-linecap="round" fill="none"/>
-      </svg>`,
-      zulmi: `<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true">
-        <circle cx="32" cy="35" r="20" fill="#60a5fa"/>
-        <polygon points="23,17 27,11 32,16 37,11 41,17" fill="#1e40af"/>
-        <circle cx="25" cy="33" r="3.5" fill="#0f172a"/>
-        <circle cx="39" cy="33" r="3.5" fill="#0f172a"/>
-        <path d="M26 42 Q32 48 38 42" stroke="#0f172a" stroke-width="3" stroke-linecap="round" fill="none"/>
-      </svg>`,
-      linn: `<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true">
-        <ellipse cx="32" cy="34" rx="21" ry="18" fill="#fef08a"/>
-        <circle cx="25" cy="33" r="3.2" fill="#0f172a"/>
-        <circle cx="39" cy="33" r="3.2" fill="#0f172a"/>
-        <path d="M27 43 Q32 46 37 43" stroke="#0f172a" stroke-width="2.8" stroke-linecap="round" fill="none"/>
-      </svg>`,
-      azedo: `<svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true">
-        <circle cx="32" cy="35" r="18" fill="#bef264"/>
-        <circle cx="26" cy="33" r="3.5" fill="#0f172a"/>
-        <circle cx="38" cy="33" r="3.5" fill="#0f172a"/>
-        <ellipse cx="32" cy="43" rx="4" ry="3" fill="#0f172a"/>
-      </svg>`
-    };
-
-    function handleCharacterImageError(imgEl) {
-      const rawFallbacks = imgEl.getAttribute('data-fallbacks') || '';
-      const queue = rawFallbacks
-        .split(',')
-        .map(item => item.trim())
-        .filter(Boolean);
-
-      if (queue.length > 0) {
-        const nextSrc = queue.shift();
-        imgEl.setAttribute('data-fallbacks', queue.join(','));
-        imgEl.src = nextSrc;
-        return;
-      }
-
-      const charKey = imgEl.getAttribute('data-char');
-      const parentAvatar = imgEl.parentElement;
-      if (parentAvatar && characterSvgFallbacks[charKey]) {
-        parentAvatar.innerHTML = characterSvgFallbacks[charKey];
-      } else {
-        imgEl.style.display = 'none';
-      }
-    }
-
-    // ==========================================
-    // 1. SISTEMA DE CONFETES (CANVAS PURO)
-    // ==========================================
-    const canvas = document.getElementById('confetti-canvas');
-    const ctx = canvas.getContext('2d');
-    let confettiPieces = [];
-    let animationId = null;
-
-    // Cores inspiradas no universo Mundo Torajo
-    const torajoColors = ['#22c55e', '#ef4444', '#3b82f6', '#facc15', '#a3e635', '#ffffff'];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    class Confetti {
-      constructor(x, y, isBurst = false) {
-        this.x = x;
-        this.y = y;
-        this.size = Math.random() * 9 + 5;
-        this.color = torajoColors[Math.floor(Math.random() * torajoColors.length)];
-        this.shape = Math.random() > 0.4 ? 'rect' : 'circle';
-        const angle = Math.random() * Math.PI * 2;
-        const speed = isBurst ? (Math.random() * 11 + 4) : (Math.random() * 4 + 2);
-        this.vx = Math.cos(angle) * speed;
-        this.vy = isBurst ? (Math.sin(angle) * speed - 4) : (Math.random() * 3 + 2);
-        this.gravity = 0.22;
-        this.drag = 0.98;
-        this.rotation = Math.random() * 360;
-        this.rotationSpeed = (Math.random() - 0.5) * 12;
-        this.opacity = 1;
-      }
-
-      update() {
-        this.vx *= this.drag;
-        this.vy = this.vy * this.drag + this.gravity;
-        this.x += this.vx;
-        this.y += this.vy;
-        this.rotation += this.rotationSpeed;
-        if (this.y > canvas.height * 0.75) {
-          this.opacity -= 0.025;
-        }
-      }
-
-      draw() {
-        ctx.save();
-        ctx.globalAlpha = Math.max(0, this.opacity);
-        ctx.translate(this.x, this.y);
-        ctx.rotate((this.rotation * Math.PI) / 180);
-        ctx.fillStyle = this.color;
-        if (this.shape === 'rect') {
-          ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.6);
-        } else {
-          ctx.beginPath();
-          ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
-      }
-    }
-
-    function launchConfetti(count = 130) {
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height * 0.42;
-      for (let i = 0; i < count; i++) {
-        confettiPieces.push(new Confetti(centerX, centerY, true));
-      }
-      if (!animationId) {
-        animateConfetti();
-      }
-    }
-
-    function burstMiniConfetti() {
-      launchConfetti(45);
-    }
-
-    function animateConfetti() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      confettiPieces.forEach((p, index) => {
-        p.update();
-        p.draw();
-        if (p.opacity <= 0 || p.y > canvas.height + 20) {
-          confettiPieces.splice(index, 1);
-        }
-      });
-
-      if (confettiPieces.length > 0) {
-        animationId = requestAnimationFrame(animateConfetti);
-      } else {
-        animationId = null;
-      }
-    }
-
-    // ==========================================
-    // 2. TRANSIÇÃO DA TELA DE ABERTURA (PORTAL)
+    // 2. TRANSIÇÃO DA TELA DE ABERTURA (PORTAL) E ÁUDIO (1m02s)
     // ==========================================
     const portalScreen = document.getElementById('portal-screen');
     const inviteMain = document.getElementById('invite-main');
     const openBtn = document.getElementById('open-invite-btn');
+    const cornerCharacters = document.getElementById('corner-characters');
+    const bgMusic = document.getElementById('bg-music');
+    const audioToggleBtn = document.getElementById('audio-toggle-btn');
+    const audioIcon = document.getElementById('audio-icon');
+    const audioLabel = document.getElementById('audio-label');
+
+    const AUDIO_START_SECONDS = 62; // 1 minuto e 02 segundos
+    let audioStartApplied = false;
+
+    function syncAudioToggleUI() {
+      if (!bgMusic) return;
+      const isPlaying = !bgMusic.paused && !bgMusic.muted;
+      audioIcon.textContent = isPlaying ? '🔊' : '🔇';
+      audioLabel.textContent = isPlaying ? 'Som Ligado' : 'Mudo';
+    }
+
+    function seekAndPlayMusic() {
+      if (!bgMusic) return;
+
+      const applyStartAndPlay = () => {
+        try {
+          if (!audioStartApplied) {
+            if (typeof bgMusic.duration === 'number' && !Number.isNaN(bgMusic.duration) && bgMusic.duration > AUDIO_START_SECONDS) {
+              bgMusic.currentTime = AUDIO_START_SECONDS;
+            } else {
+              bgMusic.currentTime = AUDIO_START_SECONDS;
+            }
+            audioStartApplied = true;
+          }
+        } catch (err) {
+          // Caso o navegador exija aguardar o carregamento de metadados antes de buscar o tempo
+        }
+
+        bgMusic.muted = false;
+        const playPromise = bgMusic.play();
+        if (playPromise && typeof playPromise.then === 'function') {
+          playPromise
+            .then(() => {
+              syncAudioToggleUI();
+            })
+            .catch(() => {
+              syncAudioToggleUI();
+            });
+        } else {
+          syncAudioToggleUI();
+        }
+      };
+
+      if (bgMusic.readyState >= 1) {
+        applyStartAndPlay();
+      } else {
+        const onReady = () => {
+          bgMusic.removeEventListener('loadedmetadata', onReady);
+          bgMusic.removeEventListener('canplay', onReady);
+          applyStartAndPlay();
+        };
+        bgMusic.addEventListener('loadedmetadata', onReady);
+        bgMusic.addEventListener('canplay', onReady);
+        bgMusic.load();
+      }
+    }
+
+    if (bgMusic) {
+      bgMusic.addEventListener('loadedmetadata', () => {
+        if (!audioStartApplied) {
+          try {
+            bgMusic.currentTime = AUDIO_START_SECONDS;
+            audioStartApplied = true;
+          } catch (err) {}
+        }
+      });
+
+      bgMusic.addEventListener('play', syncAudioToggleUI);
+      bgMusic.addEventListener('pause', syncAudioToggleUI);
+      bgMusic.addEventListener('ended', syncAudioToggleUI);
+    }
+
+    if (audioToggleBtn && bgMusic) {
+      audioToggleBtn.addEventListener('click', () => {
+        if (bgMusic.paused) {
+          if (bgMusic.ended || (bgMusic.duration && bgMusic.currentTime >= bgMusic.duration - 0.2)) {
+            bgMusic.currentTime = AUDIO_START_SECONDS;
+          }
+          bgMusic.muted = false;
+          bgMusic.play().catch(() => {});
+        } else {
+          bgMusic.pause();
+        }
+        syncAudioToggleUI();
+      });
+    }
 
     openBtn.addEventListener('click', () => {
       portalScreen.classList.add('hidden');
       inviteMain.classList.add('visible');
+      if (cornerCharacters) {
+        cornerCharacters.classList.add('visible');
+      }
+      if (audioToggleBtn) {
+        audioToggleBtn.style.display = 'inline-flex';
+      }
+      seekAndPlayMusic();
       launchConfetti(150);
       setTimeout(() => {
         portalScreen.style.display = 'none';
