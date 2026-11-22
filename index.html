@@ -157,6 +157,79 @@
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
     }
 
+    #portal-screen.hidden {
+      opacity: 0;
+      transform: scale(1.12);
+      pointer-events: none;
+    }
+
+    .portal-badge {
+      background: linear-gradient(135deg, var(--linn-yellow), #f59e0b);
+      color: #0f172a;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
+    }
+
+    .portal-emblem {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 22px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: portalHover 3s ease-in-out infinite;
+    }
+
+    .portal-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 4px dashed var(--torajo-green);
+      animation: spinSlow 14s linear infinite;
+    }
+
+    .portal-ring-inner {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 3px solid var(--zulmi-blue);
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.45), inset 0 0 20px rgba(59, 130, 246, 0.45);
+    }
+
+    @keyframes spinSlow {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes portalHover {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .portal-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.1rem;
+      line-height: 1.15;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #4ade80, #facc15, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .portal-subtitle {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      max-width: 310px;
+      margin-bottom: 32px;
+    }
+
     .btn-open {
       background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
       color: #ffffff;
@@ -272,7 +345,7 @@
       transform: rotate(-2deg);
     }
 
-    /* Elenco Oficial Mundo Torajo - 5 Avatares Circulares (68px) */
+    /* Elenco Oficial Mundo Torajo */
     .crew-showcase {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -313,30 +386,70 @@
       transition: box-shadow 0.25s ease, transform 0.25s ease;
     }
 
-    @media (max-width: 390px) {
-      .char-avatar {
-        width: 56px;
-        height: 56px;
+    @media (max-width: 375px) {
+    /* Elenco Oficial Mundo Torajo - GIFs Animados em Destaque */
+    .crew-showcase {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+      padding: 14px 10px;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.82), rgba(30, 41, 59, 0.72));
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .char-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .char-badge:hover, .char-badge:active {
+      transform: translateY(-5px) scale(1.05);
+    }
+
+    .char-gif-box {
+      width: 100%;
+      height: 104px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow: hidden;
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
+      transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    @media (max-width: 375px) {
+      .char-gif-box {
+        height: 90px;
       }
     }
 
-    .char-badge:hover .char-avatar, .char-badge:active .char-avatar {
-      box-shadow: 0 10px 24px rgba(250, 204, 21, 0.4);
+    .char-badge:hover .char-gif-box, .char-badge:active .char-gif-box {
+      box-shadow: 0 10px 24px rgba(250, 204, 21, 0.35);
     }
 
-    .char-avatar img {
+    .char-gif-box img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      object-position: top center;
+      object-fit: contain;
       display: block;
     }
 
     .char-name {
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       font-weight: 700;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
       color: #f8fafc;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
     }
@@ -555,7 +668,45 @@
       transform: scale(0.96);
     }
 
-    /* Personagens GIF animados nos cantos inferiores da 2ª tela */
+    /* Personagens decorativos fixos/flutuantes nas extremidades inferiores da 2ª tela */
+    .corner-characters {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 25;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.7s ease 0.35s;
+    }
+
+    .corner-characters.visible {
+      opacity: 1;
+    }
+
+    .corner-char {
+      position: fixed;
+      bottom: 8px;
+      width: 84px;
+      height: auto;
+      max-height: 124px;
+      pointer-events: auto;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55));
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .corner-char:hover {
+      filter: drop-shadow(0 12px 22px rgba(250, 204, 21, 0.35));
+    }
+
+    .corner-char img {
+      width: 100%;
+      height: 100%;
+      max-height: 124px;
+      object-fit: contain;
+    /* Personagens decorativos nos cantos inferiores da 2ª tela (GIFs animados) */
     .corner-characters {
       position: fixed;
       inset: 0;
@@ -695,29 +846,15 @@
         <div class="hero-age">FAZ 10 ANOS! ⚡</div>
       </div>
 
-      <!-- Turma Oficial do Mundo Torajo (5 Avatares Circulares) -->
+      <!-- GIFs Animados em Destaque na Parte Superior (Morajo, Torajo e Zulmi) -->
       <div class="crew-showcase" title="Toque nos personagens para soltar confetes!">
-        <!-- Torajo -->
-        <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #22c55e, #15803d); border-color: #22c55e;">
-            <img
-              src="torajo.jpg"
-              alt="Torajo"
-              data-fallbacks="Torajo.jpg,torajo.jpeg,Torajo.jpeg,torajo.webp,torajo.png"
-              data-char="torajo"
-              onerror="handleCharacterImageError(this)"
-            >
-          </div>
-          <span class="char-name">Torajo</span>
-        </div>
-
         <!-- Morajo -->
         <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: #ef4444;">
+          <div class="char-gif-box" style="background: radial-gradient(circle at center, rgba(239, 68, 68, 0.35), rgba(127, 29, 29, 0.78)); border-color: #ef4444;">
             <img
-              src="morajo.jpg"
+              src="morajo.gif"
               alt="Morajo"
-              data-fallbacks="Morajo.jpg,morajo.jpeg,Morajo.jpeg,morajo.webp,morajo.png"
+              data-fallbacks="Morajo.gif,morajo.jpg,Morajo.jpg,morajo.webp,morajo.png"
               data-char="morajo"
               onerror="handleCharacterImageError(this)"
             >
@@ -725,124 +862,36 @@
           <span class="char-name">Morajo</span>
         </div>
 
+        <!-- Torajo -->
+        <div class="char-badge" onclick="burstMiniConfetti()">
+          <div class="char-gif-box" style="background: radial-gradient(circle at center, rgba(34, 197, 94, 0.38), rgba(20, 83, 45, 0.8)); border-color: #22c55e;">
+            <img
+              src="torajo.gif"
+              alt="Torajo"
+              data-fallbacks="Torajo.gif,torajo.jpg,Torajo.jpg,torajo.webp,torajo.png"
+              data-char="torajo"
+              onerror="handleCharacterImageError(this)"
+            >
+          </div>
+          <span class="char-name">Torajo</span>
+        </div>
+
         <!-- Zulmi -->
         <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-color: #3b82f6;">
+          <div class="char-gif-box" style="background: radial-gradient(circle at center, rgba(59, 130, 246, 0.38), rgba(30, 58, 138, 0.8)); border-color: #3b82f6;">
             <img
-              src="Zulmi.webp"
+              src="zulmi.gif"
               alt="Zulmi"
-              data-fallbacks="zulmi.webp,Zulmi.jpg,zulmi.jpg,Zulmi.jpeg,Zulmi.png"
+              data-fallbacks="Zulmi.gif,Zulmi.webp,zulmi.webp,Zulmi.jpg,zulmi.png"
               data-char="zulmi"
               onerror="handleCharacterImageError(this)"
             >
           </div>
           <span class="char-name">Zulmi</span>
         </div>
-
-        <!-- Linn -->
-        <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #facc15, #ca8a04); border-color: #facc15;">
-            <img
-              src="Linn.webp"
-              alt="Linn"
-              data-fallbacks="linn.webp,Linn.jpg,linn.jpg,Linn.jpeg,Linn.png"
-              data-char="linn"
-              onerror="handleCharacterImageError(this)"
-            >
-          </div>
-          <span class="char-name">Linn</span>
-        </div>
-
-        <!-- Azedo -->
-        <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #a3e635, #4d7c0f); border-color: #a3e635;">
-            <img
-              src="Azedo.jpg"
-              alt="Azedo"
-              data-fallbacks="azedo.jpg,Azedo.jpeg,azedo.jpeg,Azedo.webp,Azedo.png,azedo.png"
-              data-char="azedo"
-              onerror="handleCharacterImageError(this)"
-            >
-          </div>
-          <span class="char-name">Azedo</span>
-        </div>
       </div>
 
       <p class="invite-message">
-        Prepare-se para uma aventura épica! O <strong>Torajo, Morajo, Zulmi, Linn e Azedo</strong> já confirmaram presença. Só falta você para completar essa festa!
-      </p>
-
-      <!-- Cards de Data, Hora e Local -->
-      <div class="info-grid">
-        <div class="info-box">
-          <div class="info-icon">📅</div>
-          <div class="info-label">Data</div>
-          <div class="info-value">28 de Novembro</div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-icon">⏰</div>
-          <div class="info-label">Horário</div>
-          <div class="info-value">Às 18h30</div>
-        </div>
-
-        <div class="info-box full-width">
-          <div class="info-icon">📍</div>
-          <div>
-            <div class="info-label">Local do Evento</div>
-            <div class="info-value">Nova Arena</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Contagem Regressiva -->
-      <div class="countdown-wrapper">
-        <div class="countdown-title">⏳ Contagem Regressiva para a Festa</div>
-        <div class="countdown-boxes">
-          <div class="time-unit">
-            <div class="time-number" id="cd-days">00</div>
-            <div class="time-label">Dias</div>
-          </div>
-          <div class="time-unit">
-            <div class="time-number" id="cd-hours">00</div>
-            <div class="time-label">Horas</div>
-          </div>
-          <div class="time-unit">
-            <div class="time-number" id="cd-minutes">00</div>
-            <div class="time-label">Min</div>
-          </div>
-          <div class="time-unit">
-            <div class="time-number" id="cd-seconds">00</div>
-            <div class="time-label">Seg</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Botões de Ação -->
-      <div class="actions-stack">
-        <a
-          href="https://wa.me/?text=Ol%C3%A1!%20Confirmo%20minha%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%2010%20anos%20do%20Miguel%20(Tema%20Mundo%20Torajo)%20no%20dia%2028%20de%20Novembro%2C%20%C3%A0s%2018h30%2C%20na%20Nova%20Arena!%20%F0%9F%8E%89"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="action-btn btn-whatsapp"
-        >
-          <span>💬</span> Confirmar Presença
-        </a>
-
-        <a
-          href="https://maps.app.goo.gl/RgRfDeDmVbnPKNfu5"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="action-btn btn-maps"
-        >
-          <span>🗺️</span> Ver Localização
-        </a>
-      </div>
-
-      <p class="footer-note">Toque nos botões acima para confirmar ou abrir o mapa</p>
-    </div>
-  </main>
-
   <!-- Personagens GIF animados nas extremidades inferiores da segunda tela -->
   <div id="corner-characters" class="corner-characters" aria-hidden="false">
     <div
@@ -867,7 +916,7 @@
       <img
         src="linn.gif"
         alt="Linn"
-        data-fallbacks="Linn.gif,Linn.webp,linn.webp,Linn.jpg,linn.jpg,Linn.png"
+        data-fallbacks="Linn.gif,Linn.webp,linn.webp,Linn.jpg,linn.jpg,linn.png"
         data-char="linn"
         onerror="handleCharacterImageError(this)"
       >
