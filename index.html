@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Miguel 10 Anos - Mundo Torajo</title>
+  <!-- Importação das fontes Fredoka e Poppins do Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.85);
+      --torajo-green: #22c55e;
+      --torajo-green-dark: #15803d;
+      --morajo-red: #ef4444;
+      --zulmi-blue: #3b82f6;
+      --linn-yellow: #facc15;
+      --azzedo-lime: #a3e635;
+      --text-light: #f8fafc;
+      --text-muted: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top right, #1e3a8a, #0f172a 55%, #064e3b 100%);
+      color: var(--text-light);
+    }
+
+    /* Canvas de Confetes em Tela Cheia */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Fundo Animado com Elementos Flutuantes */
+    .floating-bg {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floater {
+      position: absolute;
+      opacity: 0.18;
+      animation: floatAnim 12s infinite ease-in-out;
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
+    }
+
+    .floater:nth-child(1) { top: 8%; left: 6%; width: 70px; animation-duration: 11s; }
+    .floater:nth-child(2) { top: 22%; right: 8%; width: 65px; animation-duration: 14s; animation-delay: -2s; }
+    .floater:nth-child(3) { top: 55%; left: 4%; width: 60px; animation-duration: 13s; animation-delay: -4s; }
+    .floater:nth-child(4) { top: 72%; right: 6%; width: 75px; animation-duration: 15s; animation-delay: -1s; }
+    .floater:nth-child(5) { top: 88%; left: 18%; width: 55px; animation-duration: 10s; animation-delay: -3s; }
+
+    @keyframes floatAnim {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      50% { transform: translateY(-28px) rotate(12deg) scale(1.08); }
+    }
+
+    /* TELA DE ABERTURA (PORTAL INTERATIVO) */
+    #portal-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      background:
+        linear-gradient(180deg, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.85) 55%, rgba(6, 78, 59, 0.9) 100%),
+        url('fundo.jpeg') center center / cover no-repeat;
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #portal-screen.hidden {
+      opacity: 0;
+      transform: scale(1.12);
+      pointer-events: none;
+    }
+
+    .portal-badge {
+      background: linear-gradient(135deg, var(--linn-yellow), #f59e0b);
+      color: #0f172a;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 15px rgba(250, 204, 21, 0.45);
+    }
+
+    .portal-emblem {
+      width: 210px;
+      height: 210px;
+      margin-bottom: 16px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: portalHover 3s ease-in-out infinite;
+    }
+
+    .portal-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.55));
+    }
+
+    @keyframes portalHover {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.03); }
+    }
+
+    .portal-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.1rem;
+      line-height: 1.15;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #4ade80, #facc15, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.6));
+    }
+
+    .portal-subtitle {
+      color: #f1f5f9;
+      font-size: 0.98rem;
+      max-width: 310px;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
+    }
+
+    #portal-screen.hidden {
+      opacity: 0;
+      transform: scale(1.12);
+      pointer-events: none;
+    }
+
+    .portal-badge {
+      background: linear-gradient(135deg, var(--linn-yellow), #f59e0b);
+      color: #0f172a;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
+    }
+
+    .portal-emblem {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 22px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: portalHover 3s ease-in-out infinite;
+    }
+
+    .portal-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 4px dashed var(--torajo-green);
+      animation: spinSlow 14s linear infinite;
+    }
+
+    .portal-ring-inner {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 3px solid var(--zulmi-blue);
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.45), inset 0 0 20px rgba(59, 130, 246, 0.45);
+    }
+
+    @keyframes spinSlow {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes portalHover {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .portal-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.1rem;
+      line-height: 1.15;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #4ade80, #facc15, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .portal-subtitle {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      max-width: 310px;
+      margin-bottom: 32px;
+    }
+
+    .btn-open {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: #ffffff;
+      border: none;
+      padding: 18px 36px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border-radius: 18px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.45), 0 4px 0 #15803d;
+      animation: pulseBtn 1.8s infinite;
+      transition: transform 0.15s ease;
+    }
+
+    .btn-open:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+    }
+
+    @keyframes pulseBtn {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7), 0 4px 0 #15803d; }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 18px rgba(34, 197, 94, 0), 0 4px 0 #15803d; }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0), 0 4px 0 #15803d; }
+    }
+
+    /* CONTEÚDO PRINCIPAL DO CONVITE */
+    #invite-main {
+      position: relative;
+      z-index: 10;
+      max-width: 460px;
+      margin: 0 auto;
+      padding: 24px 18px 44px;
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s;
+    }
+
+    #invite-main.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .invite-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      padding: 26px 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .invite-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--torajo-green), var(--morajo-red), var(--zulmi-blue), var(--linn-yellow), var(--azzedo-lime));
+    }
+
+    /* Cabeçalho */
+    .header-tag {
+      display: inline-block;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(34, 197, 94, 0.45);
+      color: #86efac;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .hero-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 3rem;
+      line-height: 1;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-shadow: 0 4px 0 #15803d, 0 8px 20px rgba(34, 197, 94, 0.4);
+      margin-bottom: 6px;
+    }
+
+    .hero-age {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      color: #fff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.35rem;
+      padding: 4px 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+      transform: rotate(-2deg);
+    }
+
+    /* Elenco Oficial Mundo Torajo */
+    .crew-showcase {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 22px 0;
+      padding: 12px 8px;
+      background: rgba(15, 23, 42, 0.65);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .char-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .char-badge:hover, .char-badge:active {
+      transform: translateY(-6px) scale(1.08);
+    }
+
+    .char-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow: hidden;
+      border: 2.5px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .char-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .char-name {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: #e2e8f0;
+    }
+
+    /* Texto de Convite */
+    .invite-message {
+      text-align: center;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      padding: 0 6px;
+    }
+
+    .invite-message strong {
+      color: #facc15;
+      font-weight: 700;
+    }
+
+    /* Grid de Informações (Data, Hora, Local) */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .info-box {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 14px 12px;
+      text-align: center;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .info-box:hover, .info-box:active {
+      transform: translateY(-3px);
+      border-color: var(--torajo-green);
+      background: rgba(30, 41, 59, 0.95);
+    }
+
+    .info-box.full-width {
+      grid-column: span 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-align: left;
+      padding: 14px 18px;
+    }
+
+    .info-icon {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    .info-box.full-width .info-icon {
+      margin-bottom: 0;
+      font-size: 1.8rem;
+    }
+
+    .info-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .info-value {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.12rem;
+      color: #ffffff;
+      margin-top: 2px;
+    }
+
+    /* Contagem Regressiva */
+    .countdown-wrapper {
+      margin: 20px 0 24px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(34, 197, 94, 0.18));
+      border: 1px solid rgba(96, 165, 250, 0.35);
+      border-radius: 20px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+
+    .countdown-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #93c5fd;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .countdown-boxes {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .time-unit {
+      background: #0f172a;
+      border-radius: 14px;
+      padding: 10px 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .time-number {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.45rem;
+      color: #facc15;
+      line-height: 1.1;
+    }
+
+    .time-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    /* Botões de Ação */
+    .actions-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 16px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      cursor: pointer;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+    }
+
+    .action-btn:active {
+      transform: translateY(3px);
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4), 0 4px 0 #15803d;
+    }
+
+    .btn-whatsapp:active {
+      box-shadow: 0 3px 10px rgba(34, 197, 94, 0.4);
+    }
+
+    .btn-maps {
+      background: rgba(30, 41, 59, 0.9);
+      color: #60a5fa;
+      border: 2px solid #3b82f6;
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn-maps:hover {
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Canvas de Confetes -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Elementos Flutuantes Temáticos no Fundo -->
+  <div class="floating-bg" aria-hidden="true">
+    <!-- Maçã Verde (Torajo) -->
+    <svg class="floater" viewBox="0 0 64 64">
+      <path d="M32 16c-9 0-18 6-18 19 0 12 9 21 18 21s18-9 18-21c0-13-9-19-18-19z" fill="#22c55e"/>
+      <path d="M32 16c1-6 6-10 11-9-1 5-5 9-11 9z" fill="#84cc16"/>
+      <rect x="30" y="7" width="4" height="10" rx="2" fill="#78350f"/>
+    </svg>
+    <!-- Maçã Vermelha (Morajo) -->
+    <svg class="floater" viewBox="0 0 64 64">
+      <path d="M32 16c-9 0-18 6-18 19 0 12 9 21 18 21s18-9 18-21c0-13-9-19-18-19z" fill="#ef4444"/>
+      <path d="M32 16c1-6 6-10 11-9-1 5-5 9-11 9z" fill="#22c55e"/>
+    </svg>
+    <!-- Mirtilo (Zulmi) -->
+    <svg class="floater" viewBox="0 0 64 64">
+      <circle cx="32" cy="34" r="18" fill="#3b82f6"/>
+      <polygon points="24,18 28,12 32,17 36,12 40,18" fill="#1d4ed8"/>
+    </svg>
+    <!-- Limão Siciliano (Linn) -->
+    <svg class="floater" viewBox="0 0 64 64">
+      <ellipse cx="32" cy="32" rx="20" ry="15" transform="rotate(-25 32 32)" fill="#facc15"/>
+    </svg>
+    <!-- Limão Tahiti (Azedo) -->
+    <svg class="floater" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="16" fill="#a3e635"/>
+    </svg>
+  </div>
+
+  <!-- TELA 1: PORTAL INTERATIVO -->
+  <section id="portal-screen">
+    <span class="portal-badge">Edição Especial • 10 Anos</span>
+
+    <div class="portal-emblem">
+      <img src="logoMiguel.png" alt="Miguel 10 anos - Mundo Torajo" class="portal-logo-img">
+    </div>
+
+    <h1 class="portal-title">Portal do Mundo Torajo</h1>
+    <p class="portal-subtitle">Você recebeu um convite especial para comemorar os 10 anos do Miguel!</p>
+
+    <button id="open-invite-btn" class="btn-open" type="button">
+      ABRIR CONVITE 🚀
+    </button>
+  </section>
+
+  <!-- TELA 2: CONVITE COMPLETO -->
+  <main id="invite-main">
+    <div class="invite-card">
+      <div class="header-section">
+        <span class="header-tag">Mundo Torajo Apresenta</span>
+        <h2 class="hero-name">MIGUEL</h2>
+        <div class="hero-age">FAZ 10 ANOS! ⚡</div>
+      </div>
+
+      <!-- Turma Oficial do Mundo Torajo -->
+      <div class="crew-showcase" title="Toque nos personagens!">
+        <!-- Torajo -->
+        <div class="char-badge" onclick="burstMiniConfetti()">
+          <div class="char-avatar" style="background: #15803d; border-color: #22c55e;">
+            <img src="torajo.jpg" alt="Torajo">
+          </div>
+          <span class="char-name">Torajo</span>
+        </div>
+
+        <!-- Morajo -->
+        <div class="char-badge" onclick="burstMiniConfetti()">
+          <div class="char-avatar" style="background: #b91c1c; border-color: #ef4444;">
+            <img src="morajo.jpg" alt="Morajo">
+          </div>
+          <span class="char-name">Morajo</span>
+        </div>
+
+        <!-- Zulmi -->
+        <div class="char-badge" onclick="burstMiniConfetti()">
+          <div class="char-avatar" style="background: #1d4ed8; border-color: #3b82f6;">
+            <img src="Zulmi.webp" alt="Zulmi">
+          </div>
+          <span class="char-name">Zulmi</span>
+        </div>
+
+        <!-- Linn -->
+        <div class="char-badge" onclick="burstMiniConfetti()">
+          <div class="char-avatar" style="background: #fef9c3; border-color: #facc15;">
+            <img src="Linn.jpg" alt="Linn">
+          </div>
+          <span class="char-name">Linn</span>
+        </div>
+
+        <!-- Azedo -->
+        <div class="char-badge" onclick="burstMiniConfetti()">
+          <div class="char-avatar" style="background: #365314; border-color: #a3e635;">
+            <img src="Azedo.jpg" alt="Azedo">
+          </div>
+          <span class="char-name">Azedo</span>
+        </div>
+      </div>
+
+      <p class="invite-message">
+        Prepare-se para uma aventura épica! O <strong>Torajo, Morajo, Zulmi, Linn e Azedo</strong> já confirmaram presença. Só falta você para completar essa festa!
+      </p>
+
+      <!-- Cards de Data, Hora e Local -->
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="info-icon">📅</div>
+          <div class="info-label">Data</div>
+          <div class="info-value">28 de Novembro</div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-icon">⏰</div>
+          <div class="info-label">Horário</div>
+          <div class="info-value">Às 18h30</div>
+        </div>
+
+        <div class="info-box full-width">
+          <div class="info-icon">📍</div>
+          <div>
+            <div class="info-label">Local do Evento</div>
+            <div class="info-value">Nova Arena</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contagem Regressiva -->
+      <div class="countdown-wrapper">
+        <div class="countdown-title">⏳ Contagem Regressiva para a Festa</div>
+        <div class="countdown-boxes">
+          <div class="time-unit">
+            <div class="time-number" id="cd-days">00</div>
+            <div class="time-label">Dias</div>
+          </div>
+          <div class="time-unit">
+            <div class="time-number" id="cd-hours">00</div>
+            <div class="time-label">Horas</div>
+          </div>
+          <div class="time-unit">
+            <div class="time-number" id="cd-minutes">00</div>
+            <div class="time-label">Min</div>
+          </div>
+          <div class="time-unit">
+            <div class="time-number" id="cd-seconds">00</div>
+            <div class="time-label">Seg</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div class="actions-stack">
+        <a
+          href="https://wa.me/?text=Ol%C3%A1!%20Confirmo%20minha%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%2010%20anos%20do%20Miguel%20(Tema%20Mundo%20Torajo)%20no%20dia%2028%20de%20Novembro%2C%20%C3%A0s%2018h30%2C%20na%20Nova%20Arena!%20%F0%9F%8E%89"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="action-btn btn-whatsapp"
+        >
+          <span>💬</span> Confirmar Presença
+        </a>
+
+        <a
+          href="https://maps.app.goo.gl/RgRfDeDmVbnPKNfu5"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="action-btn btn-maps"
+        >
+          <span>🗺️</span> Ver Localização
+        </a>
+      </div>
+
+      <p class="footer-note">Toque nos botões acima para confirmar ou abrir o mapa</p>
+    </div>
+  </main>
+
+  <script>
+    // ==========================================
+    // 1. SISTEMA DE CONFETES (CANVAS PURO)
+    // ==========================================
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let confettiPieces = [];
+    let animationId = null;
+
+    // Cores inspiradas no universo Mundo Torajo
+    const torajoColors = ['#22c55e', '#ef4444', '#3b82f6', '#facc15', '#a3e635', '#ffffff'];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Confetti {
+      constructor(x, y, isBurst = false) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 9 + 5;
+        this.color = torajoColors[Math.floor(Math.random() * torajoColors.length)];
+        this.shape = Math.random() > 0.4 ? 'rect' : 'circle';
+        const angle = Math.random() * Math.PI * 2;
+        const speed = isBurst ? (Math.random() * 11 + 4) : (Math.random() * 4 + 2);
+        this.vx = Math.cos(angle) * speed;
+        this.vy = isBurst ? (Math.sin(angle) * speed - 4) : (Math.random() * 3 + 2);
+        this.gravity = 0.22;
+        this.drag = 0.98;
+        this.rotation = Math.random() * 360;
+        this.rotationSpeed = (Math.random() - 0.5) * 12;
+        this.opacity = 1;
+      }
+
+      update() {
+        this.vx *= this.drag;
+        this.vy = this.vy * this.drag + this.gravity;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotation += this.rotationSpeed;
+        if (this.y > canvas.height * 0.75) {
+          this.opacity -= 0.025;
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.opacity);
+        ctx.translate(this.x, this.y);
+        ctx.rotate((this.rotation * Math.PI) / 180);
+        ctx.fillStyle = this.color;
+        if (this.shape === 'rect') {
+          ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.6);
+        } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    function launchConfetti(count = 130) {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height * 0.42;
+      for (let i = 0; i < count; i++) {
+        confettiPieces.push(new Confetti(centerX, centerY, true));
+      }
+      if (!animationId) {
+        animateConfetti();
+      }
+    }
+
+    function burstMiniConfetti() {
+      launchConfetti(45);
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiPieces.forEach((p, index) => {
+        p.update();
+        p.draw();
+        if (p.opacity <= 0 || p.y > canvas.height + 20) {
+          confettiPieces.splice(index, 1);
+        }
+      });
+
+      if (confettiPieces.length > 0) {
+        animationId = requestAnimationFrame(animateConfetti);
+      } else {
+        animationId = null;
+      }
+    }
+
+    // ==========================================
+    // 2. TRANSIÇÃO DA TELA DE ABERTURA (PORTAL)
+    // ==========================================
+    const portalScreen = document.getElementById('portal-screen');
+    const inviteMain = document.getElementById('invite-main');
+    const openBtn = document.getElementById('open-invite-btn');
+
+    openBtn.addEventListener('click', () => {
+      portalScreen.classList.add('hidden');
+      inviteMain.classList.add('visible');
+      launchConfetti(150);
+      setTimeout(() => {
+        portalScreen.style.display = 'none';
+      }, 750);
+    });
+
+    // ==========================================
+    // 3. CONTAGEM REGRESSIVA EM TEMPO REAL
+    // ==========================================
+    function getTargetDate() {
+      const now = new Date();
+      let year = now.getFullYear();
+      // 28 de Novembro às 18:30 (Mês 10 pois Janeiro = 0)
+      let target = new Date(year, 10, 28, 18, 30, 0);
+      if (now > target) {
+        target = new Date(year + 1, 10, 28, 18, 30, 0);
+      }
+      return target;
+    }
+
+    const eventDate = getTargetDate();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = eventDate.getTime() - now;
+
+      if (distance <= 0) {
+        document.getElementById('cd-days').textContent = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-minutes').textContent = '00';
+        document.getElementById('cd-seconds').textContent = '00';
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
