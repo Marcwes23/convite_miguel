@@ -8,6 +8,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- GSAP 3 e Lucide Icons (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <style>
     :root {
       --bg-dark: #0f172a;
@@ -22,6 +27,7 @@
       --text-muted: #cbd5e1;
     }
 
+    /* Corrigido de "-" para "*" */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -63,20 +69,14 @@
     .floater {
       position: absolute;
       opacity: 0.18;
-      animation: floatAnim 12s infinite ease-in-out;
       filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));
     }
 
-    .floater:nth-child(1) { top: 8%; left: 6%; width: 70px; animation-duration: 11s; }
-    .floater:nth-child(2) { top: 22%; right: 8%; width: 65px; animation-duration: 14s; animation-delay: -2s; }
-    .floater:nth-child(3) { top: 55%; left: 4%; width: 60px; animation-duration: 13s; animation-delay: -4s; }
-    .floater:nth-child(4) { top: 72%; right: 6%; width: 75px; animation-duration: 15s; animation-delay: -1s; }
-    .floater:nth-child(5) { top: 88%; left: 18%; width: 55px; animation-duration: 10s; animation-delay: -3s; }
-
-    @keyframes floatAnim {
-      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-      50% { transform: translateY(-28px) rotate(12deg) scale(1.08); }
-    }
+    .floater:nth-child(1) { top: 8%; left: 6%; width: 70px; }
+    .floater:nth-child(2) { top: 22%; right: 8%; width: 65px; }
+    .floater:nth-child(3) { top: 55%; left: 4%; width: 60px; }
+    .floater:nth-child(4) { top: 72%; right: 6%; width: 75px; }
+    .floater:nth-child(5) { top: 88%; left: 18%; width: 55px; }
 
     /* TELA DE ABERTURA (PORTAL INTERATIVO) */
     #portal-screen {
@@ -92,12 +92,12 @@
       background:
         linear-gradient(180deg, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.85) 55%, rgba(6, 78, 59, 0.9) 100%),
         url('fundo.jpeg') center center / cover no-repeat;
-      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     #portal-screen.hidden {
       opacity: 0;
-      transform: scale(1.12);
+      transform: scale(1.08);
       pointer-events: none;
     }
 
@@ -123,7 +123,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: portalHover 3s ease-in-out infinite;
     }
 
     .portal-logo-img {
@@ -131,11 +130,6 @@
       height: 100%;
       object-fit: contain;
       filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.55));
-    }
-
-    @keyframes portalHover {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-10px) scale(1.03); }
     }
 
     .portal-title {
@@ -169,19 +163,12 @@
       border-radius: 18px;
       cursor: pointer;
       box-shadow: 0 10px 25px rgba(34, 197, 94, 0.45), 0 4px 0 #15803d;
-      animation: pulseBtn 1.8s infinite;
       transition: transform 0.15s ease;
     }
 
     .btn-open:active {
       transform: translateY(4px);
       box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
-    }
-
-    @keyframes pulseBtn {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7), 0 4px 0 #15803d; }
-      70% { transform: scale(1.05); box-shadow: 0 0 0 18px rgba(34, 197, 94, 0), 0 4px 0 #15803d; }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0), 0 4px 0 #15803d; }
     }
 
     /* CONTEÚDO PRINCIPAL DO CONVITE */
@@ -197,13 +184,12 @@
         url('fundo2.jpeg') center center / cover no-repeat;
       border-radius: 32px;
       opacity: 0;
-      transform: translateY(25px);
-      transition: opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s;
+      visibility: hidden;
     }
 
     #invite-main.visible {
       opacity: 1;
-      transform: translateY(0);
+      visibility: visible;
     }
 
     .invite-card {
@@ -272,13 +258,13 @@
       transform: rotate(-2deg);
     }
 
-    /* Elenco Oficial Mundo Torajo - 5 Avatares Circulares (68px) */
+    /* Elenco Oficial Mundo Torajo - 5 Avatares com Ícone Lucide */
     .crew-showcase {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 6px;
       margin: 22px 0;
-      padding: 14px 6px;
+      padding: 16px 6px 14px;
       background: rgba(15, 23, 42, 0.72);
       border-radius: 22px;
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -289,39 +275,68 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
       cursor: pointer;
+      position: relative;
     }
 
-    .char-badge:hover, .char-badge:active {
-      transform: translateY(-6px) scale(1.08);
-    }
-
-    .char-avatar {
+    .char-avatar-wrap {
+      position: relative;
       width: 68px;
       height: 68px;
       max-width: 100%;
+    }
+
+    .char-avatar {
+      width: 100%;
+      height: 100%;
       aspect-ratio: 1 / 1;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
-      position: relative;
       overflow: hidden;
       border: 3px solid rgba(255, 255, 255, 0.35);
-      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .char-icon-pill {
+      position: absolute;
+      bottom: -3px;
+      right: -3px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      color: #ffffff;
+      border: 2px solid currentColor;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55);
+      z-index: 2;
+    }
+
+    .char-icon-pill svg {
+      width: 13px;
+      height: 13px;
+      stroke-width: 2.5;
     }
 
     @media (max-width: 390px) {
-      .char-avatar {
+      .char-avatar-wrap {
         width: 56px;
         height: 56px;
       }
-    }
 
-    .char-badge:hover .char-avatar, .char-badge:active .char-avatar {
-      box-shadow: 0 10px 24px rgba(250, 204, 21, 0.4);
+      .char-icon-pill {
+        width: 20px;
+        height: 20px;
+      }
+
+      .char-icon-pill svg {
+        width: 11px;
+        height: 11px;
+      }
     }
 
     .char-avatar img {
@@ -595,15 +610,8 @@
       display: block;
     }
 
-    /* Canto inferior esquerdo: Azedo (GIF nativo sem distorção CSS) */
-    .corner-azedo {
-      left: 6px;
-    }
-
-    /* Canto inferior direito: Linn (GIF nativo sem distorção CSS) */
-    .corner-linn {
-      right: 6px;
-    }
+    .corner-azedo { left: 6px; }
+    .corner-linn { right: 6px; }
 
     @media (max-width: 420px) {
       .corner-char {
@@ -619,12 +627,8 @@
         height: 138px;
         bottom: 14px;
       }
-      .corner-azedo {
-        left: 20px;
-      }
-      .corner-linn {
-        right: 20px;
-      }
+      .corner-azedo { left: 20px; }
+      .corner-linn { right: 20px; }
     }
   </style>
 </head>
@@ -644,27 +648,22 @@
 
   <!-- Elementos Flutuantes Temáticos no Fundo -->
   <div class="floating-bg" aria-hidden="true">
-    <!-- Maçã Verde (Torajo) -->
     <svg class="floater" viewBox="0 0 64 64">
       <path d="M32 16c-9 0-18 6-18 19 0 12 9 21 18 21s18-9 18-21c0-13-9-19-18-19z" fill="#22c55e"/>
       <path d="M32 16c1-6 6-10 11-9-1 5-5 9-11 9z" fill="#84cc16"/>
       <rect x="30" y="7" width="4" height="10" rx="2" fill="#78350f"/>
     </svg>
-    <!-- Maçã Vermelha (Morajo) -->
     <svg class="floater" viewBox="0 0 64 64">
       <path d="M32 16c-9 0-18 6-18 19 0 12 9 21 18 21s18-9 18-21c0-13-9-19-18-19z" fill="#ef4444"/>
       <path d="M32 16c1-6 6-10 11-9-1 5-5 9-11 9z" fill="#22c55e"/>
     </svg>
-    <!-- Mirtilo (Zulmi) -->
     <svg class="floater" viewBox="0 0 64 64">
       <circle cx="32" cy="34" r="18" fill="#3b82f6"/>
       <polygon points="24,18 28,12 32,17 36,12 40,18" fill="#1d4ed8"/>
     </svg>
-    <!-- Limão Siciliano (Linn) -->
     <svg class="floater" viewBox="0 0 64 64">
       <ellipse cx="32" cy="32" rx="20" ry="15" transform="rotate(-25 32 32)" fill="#facc15"/>
     </svg>
-    <!-- Limão Tahiti (Azedo) -->
     <svg class="floater" viewBox="0 0 64 64">
       <circle cx="32" cy="32" r="16" fill="#a3e635"/>
     </svg>
@@ -672,16 +671,16 @@
 
   <!-- TELA 1: PORTAL INTERATIVO -->
   <section id="portal-screen">
-    <span class="portal-badge">Edição Especial • 10 Anos</span>
+    <span class="portal-badge gsap-portal">Edição Especial • 10 Anos</span>
 
-    <div class="portal-emblem">
+    <div class="portal-emblem gsap-portal">
       <img src="logoMiguel.png" alt="Miguel 10 anos - Mundo Torajo" class="portal-logo-img">
     </div>
 
-    <h1 class="portal-title">Portal do Mundo Torajo</h1>
-    <p class="portal-subtitle">Você recebeu um convite especial para comemorar os 10 anos do Miguel!</p>
+    <h1 class="portal-title gsap-portal">Portal do Mundo Torajo</h1>
+    <p class="portal-subtitle gsap-portal">Você recebeu um convite especial para comemorar os 10 anos do Miguel!</p>
 
-    <button id="open-invite-btn" class="btn-open" type="button">
+    <button id="open-invite-btn" class="btn-open gsap-portal" type="button">
       ABRIR CONVITE 🚀
     </button>
   </section>
@@ -690,103 +689,128 @@
   <main id="invite-main">
     <div class="invite-card">
       <div class="header-section">
-        <span class="header-tag">Mundo Torajo Apresenta</span>
-        <h2 class="hero-name">MIGUEL</h2>
-        <div class="hero-age">FAZ 10 ANOS! ⚡</div>
+        <span class="header-tag gsap-invite">Mundo Torajo Apresenta</span>
+        <h2 class="hero-name gsap-invite">MIGUEL</h2>
+        <div class="hero-age gsap-invite">FAZ 10 ANOS! ⚡</div>
       </div>
 
-      <!-- Turma Oficial do Mundo Torajo (5 Avatares Circulares) -->
+      <!-- Turma Oficial do Mundo Torajo (5 Avatares + Ícones Lucide) -->
       <div class="crew-showcase" title="Toque nos personagens para soltar confetes!">
         <!-- Torajo -->
-        <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #22c55e, #15803d); border-color: #22c55e;">
-            <img
-              src="torajo.jpg"
-              alt="Torajo"
-              data-fallbacks="Torajo.jpg,torajo.jpeg,Torajo.jpeg,torajo.webp,torajo.png"
-              data-char="torajo"
-              onerror="handleCharacterImageError(this)"
-            >
+        <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
+          <div class="char-avatar-wrap">
+            <div class="char-avatar" style="background: linear-gradient(135deg, #22c55e, #15803d); border-color: #22c55e;">
+              <img
+                src="torajo.jpg"
+                alt="Torajo"
+                data-fallbacks="Torajo.jpg,torajo.jpeg,Torajo.jpeg,torajo.webp,torajo.png"
+                data-char="torajo"
+                onerror="handleCharacterImageError(this)"
+              >
+            </div>
+            <span class="char-icon-pill" style="color: #4ade80;" aria-hidden="true">
+              <i data-lucide="zap"></i>
+            </span>
           </div>
           <span class="char-name">Torajo</span>
         </div>
 
         <!-- Morajo -->
-        <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: #ef4444;">
-            <img
-              src="morajo.jpg"
-              alt="Morajo"
-              data-fallbacks="Morajo.jpg,morajo.jpeg,Morajo.jpeg,morajo.webp,morajo.png"
-              data-char="morajo"
-              onerror="handleCharacterImageError(this)"
-            >
+        <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
+          <div class="char-avatar-wrap">
+            <div class="char-avatar" style="background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: #ef4444;">
+              <img
+                src="morajo.jpg"
+                alt="Morajo"
+                data-fallbacks="Morajo.jpg,morajo.jpeg,Morajo.jpeg,morajo.webp,morajo.png"
+                data-char="morajo"
+                onerror="handleCharacterImageError(this)"
+              >
+            </div>
+            <span class="char-icon-pill" style="color: #f87171;" aria-hidden="true">
+              <i data-lucide="flame"></i>
+            </span>
           </div>
           <span class="char-name">Morajo</span>
         </div>
 
         <!-- Zulmi -->
-        <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-color: #3b82f6;">
-            <img
-              src="Zulmi.webp"
-              alt="Zulmi"
-              data-fallbacks="zulmi.webp,Zulmi.jpg,zulmi.jpg,Zulmi.jpeg,Zulmi.png"
-              data-char="zulmi"
-              onerror="handleCharacterImageError(this)"
-            >
+        <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
+          <div class="char-avatar-wrap">
+            <div class="char-avatar" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-color: #3b82f6;">
+              <img
+                src="Zulmi.webp"
+                alt="Zulmi"
+                data-fallbacks="zulmi.webp,Zulmi.jpg,zulmi.jpg,Zulmi.jpeg,Zulmi.png"
+                data-char="zulmi"
+                onerror="handleCharacterImageError(this)"
+              >
+            </div>
+            <span class="char-icon-pill" style="color: #60a5fa;" aria-hidden="true">
+              <i data-lucide="sparkles"></i>
+            </span>
           </div>
           <span class="char-name">Zulmi</span>
         </div>
 
         <!-- Linn -->
-        <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #facc15, #ca8a04); border-color: #facc15;">
-            <img
-              src="Linn.webp"
-              alt="Linn"
-              data-fallbacks="linn.webp,Linn.jpg,linn.jpg,Linn.jpeg,Linn.png"
-              data-char="linn"
-              onerror="handleCharacterImageError(this)"
-            >
+        <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
+          <div class="char-avatar-wrap">
+            <div class="char-avatar" style="background: linear-gradient(135deg, #facc15, #ca8a04); border-color: #facc15;">
+              <img
+                src="Linn.webp"
+                alt="Linn"
+                data-fallbacks="linn.webp,Linn.jpg,linn.jpg,Linn.jpeg,Linn.png"
+                data-char="linn"
+                onerror="handleCharacterImageError(this)"
+              >
+            </div>
+            <span class="char-icon-pill" style="color: #facc15;" aria-hidden="true">
+              <i data-lucide="sun"></i>
+            </span>
           </div>
           <span class="char-name">Linn</span>
         </div>
 
         <!-- Azedo -->
-        <div class="char-badge" onclick="burstMiniConfetti()">
-          <div class="char-avatar" style="background: linear-gradient(135deg, #a3e635, #4d7c0f); border-color: #a3e635;">
-            <img
-              src="Azedo.jpg"
-              alt="Azedo"
-              data-fallbacks="azedo.jpg,Azedo.jpeg,azedo.jpeg,Azedo.webp,Azedo.png,azedo.png"
-              data-char="azedo"
-              onerror="handleCharacterImageError(this)"
-            >
+        <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
+          <div class="char-avatar-wrap">
+            <div class="char-avatar" style="background: linear-gradient(135deg, #a3e635, #4d7c0f); border-color: #a3e635;">
+              <img
+                src="Azedo.jpg"
+                alt="Azedo"
+                data-fallbacks="azedo.jpg,Azedo.jpeg,azedo.jpeg,Azedo.webp,Azedo.png,azedo.png"
+                data-char="azedo"
+                onerror="handleCharacterImageError(this)"
+              >
+            </div>
+            <span class="char-icon-pill" style="color: #bef264;" aria-hidden="true">
+              <i data-lucide="clover"></i>
+            </span>
           </div>
           <span class="char-name">Azedo</span>
         </div>
       </div>
 
-      <p class="invite-message">
+      <p class="invite-message gsap-invite">
         Prepare-se para uma aventura épica! O <strong>Torajo, Morajo, Zulmi, Linn e Azedo</strong> já confirmaram presença. Só falta você para completar essa festa!
       </p>
 
       <!-- Cards de Data, Hora e Local -->
       <div class="info-grid">
-        <div class="info-box">
+        <div class="info-box gsap-invite">
           <div class="info-icon">📅</div>
           <div class="info-label">Data</div>
           <div class="info-value">28 de Novembro</div>
         </div>
 
-        <div class="info-box">
+        <div class="info-box gsap-invite">
           <div class="info-icon">⏰</div>
           <div class="info-label">Horário</div>
           <div class="info-value">Às 18h30</div>
         </div>
 
-        <div class="info-box full-width">
+        <div class="info-box full-width gsap-invite">
           <div class="info-icon">📍</div>
           <div>
             <div class="info-label">Local do Evento</div>
@@ -796,7 +820,7 @@
       </div>
 
       <!-- Contagem Regressiva -->
-      <div class="countdown-wrapper">
+      <div class="countdown-wrapper gsap-invite">
         <div class="countdown-title">⏳ Contagem Regressiva para a Festa</div>
         <div class="countdown-boxes">
           <div class="time-unit">
@@ -824,7 +848,7 @@
           href="https://wa.me/?text=Ol%C3%A1!%20Confirmo%20minha%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%2010%20anos%20do%20Miguel%20(Tema%20Mundo%20Torajo)%20no%20dia%2028%20de%20Novembro%2C%20%C3%A0s%2018h30%2C%20na%20Nova%20Arena!%20%F0%9F%8E%89"
           target="_blank"
           rel="noopener noreferrer"
-          class="action-btn btn-whatsapp"
+          class="action-btn btn-whatsapp gsap-invite"
         >
           <span>💬</span> Confirmar Presença
         </a>
@@ -833,13 +857,13 @@
           href="https://maps.app.goo.gl/RgRfDeDmVbnPKNfu5"
           target="_blank"
           rel="noopener noreferrer"
-          class="action-btn btn-maps"
+          class="action-btn btn-maps gsap-invite"
         >
           <span>🗺️</span> Ver Localização
         </a>
       </div>
 
-      <p class="footer-note">Toque nos botões acima para confirmar ou abrir o mapa</p>
+      <p class="footer-note gsap-invite">Toque nos botões acima para confirmar ou abrir o mapa</p>
     </div>
   </main>
 
@@ -876,7 +900,116 @@
 
   <script>
     // ==========================================
-    // 0. FALLBACK DE IMAGENS E CONFETES
+    // 0. INICIALIZAÇÃO DE ÍCONES LUCIDE & GSAP
+    // ==========================================
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    function initAmbientGSAP() {
+      if (!window.gsap) return;
+
+      // Entrada do portal inicial
+      gsap.from('.gsap-portal', {
+        y: 24,
+        opacity: 0,
+        duration: 0.75,
+        stagger: 0.1,
+        ease: 'back.out(1.4)',
+        clearProps: 'transform'
+      });
+
+      // Flutuação contínua do emblema do portal
+      gsap.to('.portal-emblem', {
+        y: -10,
+        duration: 2.2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut'
+      });
+
+      // Pulso suave no botão de abrir convite
+      gsap.to('#open-invite-btn', {
+        scale: 1.04,
+        duration: 0.95,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut'
+      });
+
+      // Elementos flutuantes no fundo
+      gsap.utils.toArray('.floater').forEach((el, idx) => {
+        gsap.to(el, {
+          y: -26,
+          rotation: idx % 2 === 0 ? 14 : -14,
+          duration: 3.2 + idx * 0.5,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: idx * 0.35
+        });
+      });
+    }
+
+    function playInviteEntranceGSAP() {
+      if (!window.gsap) return;
+
+      gsap.killTweensOf(['.gsap-invite', '.gsap-char', '.char-avatar-wrap']);
+
+      // Entrada em cascata do conteúdo principal
+      gsap.fromTo(
+        '.gsap-invite',
+        { y: 22, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.55,
+          stagger: 0.06,
+          ease: 'power2.out',
+          clearProps: 'transform'
+        }
+      );
+
+      // Entrada elástica dos 5 personagens superiores
+      gsap.fromTo(
+        '.gsap-char',
+        { scale: 0.5, y: 20, opacity: 0 },
+        {
+          scale: 1,
+          y: 0,
+          opacity: 1,
+          duration: 0.65,
+          stagger: 0.08,
+          ease: 'back.out(1.8)',
+          clearProps: 'transform',
+          onComplete: () => {
+            // Flutuação alternada sutil após entrarem
+            gsap.to('.char-avatar-wrap', {
+              y: -5,
+              duration: 1.5,
+              stagger: { each: 0.18, repeat: -1, yoyo: true },
+              ease: 'sine.inOut'
+            });
+          }
+        }
+      );
+    }
+
+    function onCharacterClick(badgeEl) {
+      burstMiniConfetti();
+      if (window.gsap && badgeEl) {
+        gsap.fromTo(
+          badgeEl,
+          { scale: 0.9 },
+          { scale: 1.12, duration: 0.2, yoyo: true, repeat: 1, ease: 'power2.out', clearProps: 'transform' }
+        );
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initAmbientGSAP);
+
+    // ==========================================
+    // 1. FALLBACK DE IMAGENS E CONFETES
     // ==========================================
     function handleCharacterImageError(img) {
       const fallbacks = (img.dataset.fallbacks || '').split(',').map(s => s.trim()).filter(Boolean);
@@ -1002,7 +1135,7 @@
     const audioIcon = document.getElementById('audio-icon');
     const audioLabel = document.getElementById('audio-label');
 
-    const AUDIO_START_SECONDS = 62; // 1 minuto e 02 segundos
+    const AUDIO_START_SECONDS = 62;
     let audioStartApplied = false;
 
     function syncAudioToggleUI() {
@@ -1018,27 +1151,15 @@
       const applyStartAndPlay = () => {
         try {
           if (!audioStartApplied) {
-            if (typeof bgMusic.duration === 'number' && !Number.isNaN(bgMusic.duration) && bgMusic.duration > AUDIO_START_SECONDS) {
-              bgMusic.currentTime = AUDIO_START_SECONDS;
-            } else {
-              bgMusic.currentTime = AUDIO_START_SECONDS;
-            }
+            bgMusic.currentTime = AUDIO_START_SECONDS;
             audioStartApplied = true;
           }
-        } catch (err) {
-          // Caso o navegador exija aguardar o carregamento de metadados antes de buscar o tempo
-        }
+        } catch (err) {}
 
         bgMusic.muted = false;
         const playPromise = bgMusic.play();
         if (playPromise && typeof playPromise.then === 'function') {
-          playPromise
-            .then(() => {
-              syncAudioToggleUI();
-            })
-            .catch(() => {
-              syncAudioToggleUI();
-            });
+          playPromise.then(syncAudioToggleUI).catch(syncAudioToggleUI);
         } else {
           syncAudioToggleUI();
         }
@@ -1097,11 +1218,12 @@
       if (audioToggleBtn) {
         audioToggleBtn.style.display = 'inline-flex';
       }
+      playInviteEntranceGSAP();
       seekAndPlayMusic();
       launchConfetti(150);
       setTimeout(() => {
         portalScreen.style.display = 'none';
-      }, 750);
+      }, 700);
     });
 
     // ==========================================
@@ -1110,7 +1232,6 @@
     function getTargetDate() {
       const now = new Date();
       let year = now.getFullYear();
-      // 28 de Novembro às 18:30 (Mês 10 pois Janeiro = 0)
       let target = new Date(year, 10, 28, 18, 30, 0);
       if (now > target) {
         target = new Date(year + 1, 10, 28, 18, 30, 0);
