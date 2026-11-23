@@ -9,9 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- GSAP 3 e Lucide Icons (CDN) -->
+  <!-- GSAP 3 (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
     :root {
@@ -27,7 +26,6 @@
       --text-muted: #cbd5e1;
     }
 
-    /* Corrigido de "-" para "*" */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -258,7 +256,7 @@
       transform: rotate(-2deg);
     }
 
-    /* Elenco Oficial Mundo Torajo - 5 Avatares com Ícone Lucide */
+    /* Elenco Oficial Mundo Torajo - 5 Avatares com Frutas */
     .crew-showcase {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -299,27 +297,27 @@
       border: 3px solid rgba(255, 255, 255, 0.35);
     }
 
-    .char-icon-pill {
+    .char-fruit-badge {
       position: absolute;
-      bottom: -3px;
-      right: -3px;
-      width: 24px;
-      height: 24px;
+      bottom: -4px;
+      right: -4px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #0f172a;
-      color: #ffffff;
-      border: 2px solid currentColor;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.65);
       z-index: 2;
+      padding: 3px;
     }
 
-    .char-icon-pill svg {
-      width: 13px;
-      height: 13px;
-      stroke-width: 2.5;
+    .char-fruit-badge svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     @media (max-width: 390px) {
@@ -328,14 +326,10 @@
         height: 56px;
       }
 
-      .char-icon-pill {
-        width: 20px;
-        height: 20px;
-      }
-
-      .char-icon-pill svg {
-        width: 11px;
-        height: 11px;
+      .char-fruit-badge {
+        width: 24px;
+        height: 24px;
+        padding: 2px;
       }
     }
 
@@ -694,9 +688,9 @@
         <div class="hero-age gsap-invite">FAZ 10 ANOS! ⚡</div>
       </div>
 
-      <!-- Turma Oficial do Mundo Torajo (5 Avatares + Ícones Lucide) -->
+      <!-- Turma Oficial do Mundo Torajo (5 Avatares + Frutas) -->
       <div class="crew-showcase" title="Toque nos personagens para soltar confetes!">
-        <!-- Torajo -->
+        <!-- Torajo: Maçã Verde -->
         <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
           <div class="char-avatar-wrap">
             <div class="char-avatar" style="background: linear-gradient(135deg, #22c55e, #15803d); border-color: #22c55e;">
@@ -708,14 +702,18 @@
                 onerror="handleCharacterImageError(this)"
               >
             </div>
-            <span class="char-icon-pill" style="color: #4ade80;" aria-hidden="true">
-              <i data-lucide="zap"></i>
+            <span class="char-fruit-badge" style="border-color: rgba(34, 197, 94, 0.7);" title="Maçã Verde" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <path d="M32 18c-8.5 0-16.5 5.5-16.5 17.5 0 11 8.2 19 16.5 19s16.5-8 16.5-19C48.5 23.5 40.5 18 32 18z" fill="#22c55e"/>
+                <path d="M32 18c1-5.5 5.5-9 10-8-1 4.5-4.5 8-10 8z" fill="#a3e635"/>
+                <rect x="30.2" y="9" width="3.6" height="9" rx="1.8" fill="#92400e"/>
+              </svg>
             </span>
           </div>
           <span class="char-name">Torajo</span>
         </div>
 
-        <!-- Morajo -->
+        <!-- Morajo: Maçã Vermelha -->
         <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
           <div class="char-avatar-wrap">
             <div class="char-avatar" style="background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: #ef4444;">
@@ -727,52 +725,64 @@
                 onerror="handleCharacterImageError(this)"
               >
             </div>
-            <span class="char-icon-pill" style="color: #f87171;" aria-hidden="true">
-              <i data-lucide="flame"></i>
+            <span class="char-fruit-badge" style="border-color: rgba(239, 68, 68, 0.7);" title="Maçã Vermelha" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <path d="M32 18c-8.5 0-16.5 5.5-16.5 17.5 0 11 8.2 19 16.5 19s16.5-8 16.5-19C48.5 23.5 40.5 18 32 18z" fill="#ef4444"/>
+                <path d="M32 18c1-5.5 5.5-9 10-8-1 4.5-4.5 8-10 8z" fill="#22c55e"/>
+                <rect x="30.2" y="9" width="3.6" height="9" rx="1.8" fill="#78350f"/>
+              </svg>
             </span>
           </div>
           <span class="char-name">Morajo</span>
         </div>
 
-        <!-- Zulmi -->
+        <!-- Zulmi: Mirtilo -->
         <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
           <div class="char-avatar-wrap">
             <div class="char-avatar" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-color: #3b82f6;">
               <img
                 src="Zulmi.webp"
                 alt="Zulmi"
-                data-fallbacks="zulmi.webp,Zulmi.jpg,zulmi.jpg,Zulmi.jpeg,Zulmi.png"
+                data-fallbacks="zulmi.webp,Zulmi.jpg,zulmi.jpg,Zulmi.jpeg,zulmi.png"
                 data-char="zulmi"
                 onerror="handleCharacterImageError(this)"
               >
             </div>
-            <span class="char-icon-pill" style="color: #60a5fa;" aria-hidden="true">
-              <i data-lucide="sparkles"></i>
+            <span class="char-fruit-badge" style="border-color: rgba(59, 130, 246, 0.7);" title="Mirtilo" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <circle cx="32" cy="36" r="16.5" fill="#3b82f6"/>
+                <circle cx="27" cy="31" r="4" fill="#93c5fd" opacity="0.55"/>
+                <polygon points="25,20 28.5,14 32,19 35.5,14 39,20" fill="#1d4ed8"/>
+              </svg>
             </span>
           </div>
           <span class="char-name">Zulmi</span>
         </div>
 
-        <!-- Linn -->
+        <!-- Linn: Limão Siciliano -->
         <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
           <div class="char-avatar-wrap">
             <div class="char-avatar" style="background: linear-gradient(135deg, #facc15, #ca8a04); border-color: #facc15;">
               <img
                 src="Linn.webp"
                 alt="Linn"
-                data-fallbacks="linn.webp,Linn.jpg,linn.jpg,Linn.jpeg,Linn.png"
+                data-fallbacks="linn.webp,Linn.jpg,linn.jpg,Linn.jpeg,linn.png"
                 data-char="linn"
                 onerror="handleCharacterImageError(this)"
               >
             </div>
-            <span class="char-icon-pill" style="color: #facc15;" aria-hidden="true">
-              <i data-lucide="sun"></i>
+            <span class="char-fruit-badge" style="border-color: rgba(250, 204, 21, 0.7);" title="Limão Siciliano" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <ellipse cx="32" cy="32" rx="19" ry="13.5" transform="rotate(-24 32 32)" fill="#facc15"/>
+                <circle cx="15.5" cy="39.5" r="2.6" fill="#eab308"/>
+                <circle cx="48.5" cy="24.5" r="2.6" fill="#eab308"/>
+              </svg>
             </span>
           </div>
           <span class="char-name">Linn</span>
         </div>
 
-        <!-- Azedo -->
+        <!-- Azedo: Limão -->
         <div class="char-badge gsap-char" onclick="onCharacterClick(this)">
           <div class="char-avatar-wrap">
             <div class="char-avatar" style="background: linear-gradient(135deg, #a3e635, #4d7c0f); border-color: #a3e635;">
@@ -784,8 +794,12 @@
                 onerror="handleCharacterImageError(this)"
               >
             </div>
-            <span class="char-icon-pill" style="color: #bef264;" aria-hidden="true">
-              <i data-lucide="clover"></i>
+            <span class="char-fruit-badge" style="border-color: rgba(163, 230, 53, 0.7);" title="Limão" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <circle cx="32" cy="33" r="16.5" fill="#84cc16"/>
+                <circle cx="27" cy="28" r="4" fill="#d9f99d" opacity="0.55"/>
+                <path d="M32 16.5c1.5-4.5 5.5-7 9.5-6-1 4-4.5 6.5-9.5 6z" fill="#4d7c0f"/>
+              </svg>
             </span>
           </div>
           <span class="char-name">Azedo</span>
@@ -845,7 +859,7 @@
       <!-- Botões de Ação -->
       <div class="actions-stack">
         <a
-          href="https://wa.me/5588988182940?text=Ol%C3%A1!%20Confirmo%20minha%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%2010%20anos%20do%20Miguel%20(Tema%20Mundo%20Torajo)%20no%20dia%2028%20de%20Novembro%2C%20%C3%A0s%2018h30%2C%20na%20Nova%20Arena!%20%F0%9F%8E%89"
+          href="https://wa.me/?text=Ol%C3%A1!%20Confirmo%20minha%20presen%C3%A7a%20no%20anivers%C3%A1rio%20de%2010%20anos%20do%20Miguel%20(Tema%20Mundo%20Torajo)%20no%20dia%2028%20de%20Novembro%2C%20%C3%A0s%2018h30%2C%20na%20Nova%20Arena!%20%F0%9F%8E%89"
           target="_blank"
           rel="noopener noreferrer"
           class="action-btn btn-whatsapp gsap-invite"
@@ -900,16 +914,11 @@
 
   <script>
     // ==========================================
-    // 0. INICIALIZAÇÃO DE ÍCONES LUCIDE & GSAP
+    // 0. ANIMAÇÕES COM GSAP
     // ==========================================
-    if (window.lucide) {
-      lucide.createIcons();
-    }
-
     function initAmbientGSAP() {
       if (!window.gsap) return;
 
-      // Entrada do portal inicial
       gsap.from('.gsap-portal', {
         y: 24,
         opacity: 0,
@@ -919,7 +928,6 @@
         clearProps: 'transform'
       });
 
-      // Flutuação contínua do emblema do portal
       gsap.to('.portal-emblem', {
         y: -10,
         duration: 2.2,
@@ -928,7 +936,6 @@
         ease: 'sine.inOut'
       });
 
-      // Pulso suave no botão de abrir convite
       gsap.to('#open-invite-btn', {
         scale: 1.04,
         duration: 0.95,
@@ -937,7 +944,6 @@
         ease: 'sine.inOut'
       });
 
-      // Elementos flutuantes no fundo
       gsap.utils.toArray('.floater').forEach((el, idx) => {
         gsap.to(el, {
           y: -26,
@@ -956,7 +962,6 @@
 
       gsap.killTweensOf(['.gsap-invite', '.gsap-char', '.char-avatar-wrap']);
 
-      // Entrada em cascata do conteúdo principal
       gsap.fromTo(
         '.gsap-invite',
         { y: 22, opacity: 0 },
@@ -970,7 +975,6 @@
         }
       );
 
-      // Entrada elástica dos 5 personagens superiores
       gsap.fromTo(
         '.gsap-char',
         { scale: 0.5, y: 20, opacity: 0 },
@@ -983,7 +987,6 @@
           ease: 'back.out(1.8)',
           clearProps: 'transform',
           onComplete: () => {
-            // Flutuação alternada sutil após entrarem
             gsap.to('.char-avatar-wrap', {
               y: -5,
               duration: 1.5,
@@ -1156,116 +1159,4 @@
           }
         } catch (err) {}
 
-        bgMusic.muted = false;
-        const playPromise = bgMusic.play();
-        if (playPromise && typeof playPromise.then === 'function') {
-          playPromise.then(syncAudioToggleUI).catch(syncAudioToggleUI);
-        } else {
-          syncAudioToggleUI();
-        }
-      };
-
-      if (bgMusic.readyState >= 1) {
-        applyStartAndPlay();
-      } else {
-        const onReady = () => {
-          bgMusic.removeEventListener('loadedmetadata', onReady);
-          bgMusic.removeEventListener('canplay', onReady);
-          applyStartAndPlay();
-        };
-        bgMusic.addEventListener('loadedmetadata', onReady);
-        bgMusic.addEventListener('canplay', onReady);
-        bgMusic.load();
-      }
-    }
-
-    if (bgMusic) {
-      bgMusic.addEventListener('loadedmetadata', () => {
-        if (!audioStartApplied) {
-          try {
-            bgMusic.currentTime = AUDIO_START_SECONDS;
-            audioStartApplied = true;
-          } catch (err) {}
-        }
-      });
-
-      bgMusic.addEventListener('play', syncAudioToggleUI);
-      bgMusic.addEventListener('pause', syncAudioToggleUI);
-      bgMusic.addEventListener('ended', syncAudioToggleUI);
-    }
-
-    if (audioToggleBtn && bgMusic) {
-      audioToggleBtn.addEventListener('click', () => {
-        if (bgMusic.paused) {
-          if (bgMusic.ended || (bgMusic.duration && bgMusic.currentTime >= bgMusic.duration - 0.2)) {
-            bgMusic.currentTime = AUDIO_START_SECONDS;
-          }
-          bgMusic.muted = false;
-          bgMusic.play().catch(() => {});
-        } else {
-          bgMusic.pause();
-        }
-        syncAudioToggleUI();
-      });
-    }
-
-    openBtn.addEventListener('click', () => {
-      portalScreen.classList.add('hidden');
-      inviteMain.classList.add('visible');
-      if (cornerCharacters) {
-        cornerCharacters.classList.add('visible');
-      }
-      if (audioToggleBtn) {
-        audioToggleBtn.style.display = 'inline-flex';
-      }
-      playInviteEntranceGSAP();
-      seekAndPlayMusic();
-      launchConfetti(150);
-      setTimeout(() => {
-        portalScreen.style.display = 'none';
-      }, 700);
-    });
-
-    // ==========================================
-    // 3. CONTAGEM REGRESSIVA EM TEMPO REAL
-    // ==========================================
-    function getTargetDate() {
-      const now = new Date();
-      let year = now.getFullYear();
-      let target = new Date(year, 10, 28, 18, 30, 0);
-      if (now > target) {
-        target = new Date(year + 1, 10, 28, 18, 30, 0);
-      }
-      return target;
-    }
-
-    const eventDate = getTargetDate();
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = eventDate.getTime() - now;
-
-      if (distance <= 0) {
-        document.getElementById('cd-days').textContent = '00';
-        document.getElementById('cd-hours').textContent = '00';
-        document.getElementById('cd-minutes').textContent = '00';
-        document.getElementById('cd-seconds').textContent = '00';
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
-      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
-      document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
-      document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-  </script>
-</body>
-</html>
+        bgMusic.muted = false
